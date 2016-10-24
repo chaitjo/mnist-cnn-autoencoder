@@ -4,14 +4,26 @@ from tflearn.layers.core import input_data, dropout, fully_connected
 from tflearn.layers.conv import conv_2d, max_pool_2d, avg_pool_2d
 from tflearn.layers.normalization import local_response_normalization
 from tflearn.layers.estimator import regression
-from tflearn.layers.optimizers import Momentum
+from tflearn.optimizers import Momentum
 import tensorflow as tf
 import os
 
-tf.flags.DEFINE_string("learning_rate", 0.01)
-tf.flags.DEFINE_string("momentum", 0.9)
-tf.flags.DEFINE_string("lr_decay", 0.96)
-tf.flags.DEFINE_string("batch_size", 50)
+tf.flags.DEFINE_float("learning_rate", 0.01, "Learning Rate")
+tf.flags.DEFINE_float("momentum", 0.9, "Momentum Parameter")
+tf.flags.DEFINE_float("lr_decay", 0.95, "LR Decay Parameter")
+tf.flags.DEFINE_integer("batch_size", 50, "Batch Size")
+
+FLAGS = tf.flags.FLAGS
+FLAGS._parse_flags()
+print("\nParameters:")
+for attr, value in sorted(FLAGS.__flags.items()):
+    print("{}={}".format(attr.upper(), value))
+print("")
+
+learning_rate = FLAGS.learning_rate
+momentum = FLAGS.momentum
+lr_decay = FLAGS.lr_decay
+batch_size = FLAGS.batch_size
 
 X, Y = tflearn.data_utils.image_preloader('../Data/Train', image_shape=(28, 28),
 										mode='folder', categorical_labels=True)
@@ -52,13 +64,13 @@ network = regression(network, optimizer=sgd_momentum, learning_rate=learning_rat
 
 # Training
 model_name = 'sgdm_1layer_lr{}_mom{}_dec{}_batch{}'.format(learning_rate, momentum, lr_decay, batch_size)
-os.makedirs('/checkpoints/'+model_name)
-os.makedirs('/best_checkpoints/'+model_name)
+os.makedirs('checkpoints/'+model_name)
+os.makedirs('best_checkpoints/'+model_name)
 
 model = tflearn.DNN(network, 
 					tensorboard_verbose=0, tensorboard_dir='summaries', 
 					checkpoint_path='checkpoints/'+model_name+'/checkpoints', 
-					best_checkpoint_path='best_checkpoints/'+model_name+'/best_checkpoints', best_val_accuracy=0.85)
+					best_checkpoint_path='best_checkpoints/'+model_name+'/best_checkpoints', best_val_accuracy=0.95)
 model.fit({'input': X}, {'target': Y}, n_epoch=25,
 		validation_set=({'input': testX}, {'target': testY}),
 		batch_size=batch_size, shuffle=True,
