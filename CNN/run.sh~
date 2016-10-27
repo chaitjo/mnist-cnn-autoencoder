@@ -1,4 +1,0 @@
-#!/bin/bash
-source ~/tensorflow_py27_cpu/bin/activate
-cd ~/nn-project-2/CNN/
-python cnn_multilayer.py --filters_hidden1=30 --filters_hidden2=50 
