@@ -77,7 +77,7 @@ for i in xrange(n_hidden):
 	plt.subplot(len_, len_, i + 1)
 	plt.imshow(weights[:, i].reshape(28, 28), cmap='gray')
 	plt.axis('off')
-plt.show()
+plt.savefig('weights.png')
 
 
 
@@ -89,4 +89,4 @@ for i in range(10):
     a[1][i].imshow(np.reshape(encode_decode[i], (28, 28)), cmap='gray')
 f.show()
 plt.draw()
-plt.show()
+plt.savefig('reconstruction.png')
