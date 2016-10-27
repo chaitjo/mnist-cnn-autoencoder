@@ -47,19 +47,21 @@ X = ReshapedImagePreloader(X)
 testX = ReshapedImagePreloader(testX)
 
 # Building convolutional network
-network = input_data(shape=[None, 28, 28, 1], name='input')
-network = conv_2d(network, 20, 9,
+input = input_data(shape=[None, 28, 28, 1], name='input')
+
+convolution = conv_2d(input, 20, 9,
 				strides=1, padding='same', activation='relu',
 				bias=True, weights_init='truncated_normal',
 				regularizer='L2', weight_decay=0.001)
-network = avg_pool_2d(network, 2)
-network = fully_connected(network, 10, activation='softmax',
+pooling = avg_pool_2d(convolution, 2)
+
+fully_connected = fully_connected(pooling, 10, activation='softmax',
 						bias=True, weights_init='truncated_normal', bias_init='zeros',
 						regularizer='L2', weight_decay=0.001)
 
 sgd_momentum = Momentum(learning_rate=learning_rate, momentum=momentum, 
 						lr_decay=lr_decay, decay_step=100)
-network = regression(network, optimizer=sgd_momentum, learning_rate=learning_rate,
+network = regression(fully_connected, optimizer=sgd_momentum, learning_rate=learning_rate,
 					loss='categorical_crossentropy', metric='accuracy', name='target')
 
 # Training
@@ -71,6 +73,7 @@ model = tflearn.DNN(network,
 					tensorboard_verbose=0, tensorboard_dir='summaries', 
 					checkpoint_path='checkpoints/'+model_name+'/checkpoints', 
 					best_checkpoint_path='best_checkpoints/'+model_name+'/best_checkpoints', best_val_accuracy=0.95)
+
 model.fit({'input': X}, {'target': Y}, n_epoch=25,
 		validation_set=({'input': testX}, {'target': testY}),
 		batch_size=batch_size, shuffle=True,

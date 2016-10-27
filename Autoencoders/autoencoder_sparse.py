@@ -27,13 +27,13 @@ np.random.shuffle(testX)
 
 learning_rate = 0.001
 momentum = 0.95
-epochs = 10
+epochs = 1000
 display_step = 1
 n_input = 784
 n_hidden = 100
 
 sparsity = 0.05
-sparse_coef = 0.0
+sparse_coef = 0.5
 
 
 inputs = tf.placeholder(tf.float32, [None, n_input])

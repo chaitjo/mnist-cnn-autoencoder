@@ -1,9 +1,18 @@
 #!/bin/bash
 source ~/tensorflow_py27_cpu/bin/activate
 cd ~/nn-project-2/CNN/
-python cnn.py --learning_rate=0.15 --momentum=0.9 --lr_decay=0.95 --batch_size=50
-python cnn.py --learning_rate=0.2 --momentum=0.9 --lr_decay=0.95 --batch_size=50
-python cnn.py --learning_rate=0.01 --momentum=0.93 --lr_decay=0.95 --batch_size=50
-python cnn.py --learning_rate=0.01 --momentum=0.97 --lr_decay=0.95 --batch_size=50
-python cnn.py --learning_rate=0.01 --momentum=0.9 --lr_decay=0.93 --batch_size=50
-python cnn.py --learning_rate=0.01 --momentum=0.9 --lr_decay=0.97 --batch_size=50
+python cnn_multilayer.py --filters_hidden1=30 --filters_hidden2=30
+python cnn_multilayer.py --filters_hidden1=30 --filters_hidden2=65
+python cnn_multilayer.py --filters_hidden1=50 --filters_hidden2=30
+python cnn_multilayer.py --filters_hidden1=50 --filters_hidden2=50
+python cnn_multilayer.py --filters_hidden1=50 --filters_hidden2=65
+python cnn_multilayer.py --filters_hidden1=65 --filters_hidden2=30
+python cnn_multilayer.py --filters_hidden1=65 --filters_hidden2=50
+python cnn_multilayer.py --filters_hidden1=65 --filters_hidden2=65
+
+
+
+
+
+
+
