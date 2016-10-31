@@ -1,7 +1,7 @@
 function autoencoderPreprocess()
        %..\Images_Data_Clipped
-    dataTrainObject = imageDatastore('..\Images_Data_Clipped\Train\*','LabelSource','foldernames'); %Modify the folder location in this line
-    dataTestObject = imageDatastore( '..\Images_Data_Clipped\Test\*','LabelSource','foldernames');  %Modify the folder location in this line
+    dataTrainObject = imageDatastore('..\Data\Train\*','LabelSource','foldernames'); %Modify the folder location in this line
+    dataTestObject = imageDatastore( '..\Data\Test\*','LabelSource','foldernames');  %Modify the folder location in this line
 
     labelsTest = dataTestObject.Labels;
     labelsTest = uint8(labelsTest);
@@ -9,12 +9,13 @@ function autoencoderPreprocess()
     labelsTest(labelsTest == 0) = 10;
     labelsTestSoftmax = zeros(10, size(labelsTest, 1));
 
-    dataTest = cell(1, numel(labelsTest)); 
+    dataTest = cell(1, numel(labelsTest));
 
     for  i = (1: size(labelsTest, 1))
         %disp(dataTrainObject.Files{i});
         filename = dataTestObject.Files{i};
         file = imread(filename);
+        file = mat2gray(file, [0 255]);
         dataTest{1, i} = file;
     end
 
@@ -33,6 +34,7 @@ function autoencoderPreprocess()
         %disp(dataTrainObject.Files{i});
         filename = dataTrainObject.Files{i};
         file = imread(filename);
+        file = mat2gray(file, [0 255]);
         %disp(size(file(:)));
         dataTrain{1, i} = file;
     end

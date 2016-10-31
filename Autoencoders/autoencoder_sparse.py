@@ -22,18 +22,18 @@ testX = testX.reshape([-1, 784])
 np.random.shuffle(X)
 np.random.shuffle(testX)
 
-#X = X[:200]
-#testX = testX[:40]
+X = X[:100]
+testX = testX[:20]
 
 learning_rate = 0.001
 momentum = 0.95
-epochs = 1000
+epochs = 100
 display_step = 1
 n_input = 784
 n_hidden = 100
 
 sparsity = 0.05
-sparse_coef = 0.5
+sparse_coef = 0
 
 
 inputs = tf.placeholder(tf.float32, [None, n_input])
@@ -58,6 +58,7 @@ optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
 sess = tf.Session()
 sess.run(tf.initialize_all_variables())
 
+#reshapedX = X.reshape([-1, 50, 784])
 for i in xrange(epochs):
 	for record in X:
 		sess.run(optimizer, feed_dict={inputs: [record]})
