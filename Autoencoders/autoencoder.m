@@ -5,27 +5,18 @@ load 'dataTrain.mat';
 load 'labelsTest.mat';
 load 'labelsTrain.mat';
 
-%Take 100 samples for training and 20 for testing
-%dataTestSubset = dataTest(1, 1:20);
-%dataTrainSubset = dataTrain(1, 1:100);
 
-
-hiddenSize1 = 100;
+hiddenSize1 = 150;
 
 autoenc1 = trainAutoencoder(dataTrain, hiddenSize1, ...
     'MaxEpochs',200, ...
-    'SparsityRegularization',1, ...
-    'SparsityProportion',0.3);
+    'SparsityRegularization',2, ...
+    'SparsityProportion',0.2);
 
 figure(), plotWeights(autoenc1);
 
 reconstructed = predict(autoenc1, dataTest);
 
-figure;
-for i = 1:20
-    subplot(4,5,i);
-    imshow(reconstructed{i});
-end
 
 
 mseError = 0;
@@ -37,16 +28,18 @@ mseError = mseError/i;
 disp('L1 MSE: ');
 disp(mseError);
 
+
 feat1 = encode(autoenc1, dataTrain);
 
-hiddenSize2 = 50;
+hiddenSize2 = 100;
 
 autoenc2 = trainAutoencoder(feat1, hiddenSize2, ...
     'MaxEpochs', 200, ...
-    'SparsityRegularization', 1, ...
-    'SparsityProportion', 0.3);
+    'SparsityRegularization', 2, ...
+    'SparsityProportion', 0.2);
 
 figure(), plotWeights(autoenc2);
+
 
 % calculate L2 MSE
 feat1Test = encode(autoenc1, dataTest);
@@ -64,6 +57,7 @@ disp(mseError);
 
 feat2 = encode(autoenc2,feat1);
 
+
 softnet = trainSoftmaxLayer(feat2, labelsTrain, 'MaxEpochs',200);
 
 % Build stacked autoencoder
@@ -80,12 +74,11 @@ y = deepnet(xTest);
 plotconfusion(labelsTest,y);
 
 
-
-%figure;
-%for i = 1:20
-%    subplot(4,5,i);
-%    imshow(dataTest{i});
-%end
+figure;
+for i = 1:20
+    subplot(4,5,i);
+    imshow(dataTest{i});
+end
 
 figure;
 for i = 1:20
